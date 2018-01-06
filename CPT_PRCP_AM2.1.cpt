@@ -1,0 +1,112 @@
+#!/bin/bash 
+../CPT.x <<- END
+1 # Opens CCA view
+1 # Opens X input file
+/home/agm/Documents/Publics/CLLJ/CPT/15.3.7/AM2p1/pmm.nc.cpt.txt
+33 # Nothernmost latitude
+4 # Southernmost latitude
+-118 # Westernmost longitude
+-52 # Easternmost longitude
+1 # minimum number of modes
+8 # maximum number of modes
+
+2 # Opens Y input file
+/home/agm/Documents/Publics/CLLJ/CPT/15.3.7/AM2p1/PRECIP_JAS_81-05_CRU3p22.tsv
+33 # Nothernmost latitude
+4 # Southernmost latitude
+-118 # Westernmost longitude
+-52 # Easternmost longitude
+1 # minimum number of modes
+8 # maximum number of modes
+1 # Minimum number of modes for CCA
+8 # Maximum number of modes for CCA
+
+4 # X training period
+1981 # First year of X training period
+5 # Y training period
+1981 # First year of Y training period
+
+522 # X mode
+1
+524 # Y mode
+1
+531 # Goodness index
+3 # Kendall's tau
+
+
+6 # Forecast setting 
+2000 # First date from which to forecast
+7 # Option: Lenght of training period
+25 # Lenght of training period 
+8 # Option: Length of cross-validation window
+3 # Enter length
+9 # number of forecasts
+5 # number
+
+541 # turn on Transform Y data
+542 # Turn on zero bound for Y data
+543 # Turn on Sorth ensemble members
+
+544 # Missing value options
+-9.99e+08 # Missing value X flag:
+10 # Maximum % of missing values
+10 # Maximum % of missing gridpoints
+1 # Number of near-neighbours
+4 # Missing value replacement : best-near-neighbours
+-9.99e+08 # Y missing value flag
+10 # Maximum % of missing values
+10 # Maximum % of missing stations
+1 # Number of near-neighours
+4 # Best near neighbour
+545 # Turn OFF synchronous predictors
+552 # Forecast Settings
+70. # confidence level 
+
+1 # Error variance : Cross validated error variance
+3 # number of ensemble forecast
+y # ODDS - Confidence intervals
+1 # Precision: Number of decimal places
+1 # forecast probability rounding 
+
+# Cross-validation
+112 # save goodness index
+./PRCP_GoodnessIndex.txt
+
+#######BUILD MODEL  !!!!!
+311 # Cross-validation
+
+# Run Prognostics
+455 # Forecast probabilites
+
+131 # select output format
+3 # GrADS format
+# Save forecast results
+111 # output results
+# save as GrADS
+
+# forecast results
+23 # save forecast probabilities
+./PRCP_FcstProb.dat
+
+0 # Stop saving
+
+413 # cross-validated skill maps
+2 # save Spearmans Correlation
+./PRCP_Spearman.dat
+
+413 # cross-validated skill maps
+3 # save 2AFC score
+./PRCP_2AFC.dat
+
+413 # cross-validated skill maps
+10 # save 2AFC score
+./PRCP_RocBelow.dat
+
+413 # cross-validated skill maps
+11 # save 2AFC score
+./PRCP_RocAbove.dat
+
+0 # Stop saving
+
+0 # Exit
+END

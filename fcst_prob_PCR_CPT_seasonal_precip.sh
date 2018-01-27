@@ -1,16 +1,19 @@
 #! /bin/bash
-#Script to automate the download of NMME seasonal rainfall deterministic hindcasts and observations, 
-#and to execute CPT to assess associated raw skill
+#Script to automate the execution of CPT to produce forecasts using NMME models and PCR for MOS. 
+#It dowloads the predictor and predictand data from the DL, creates the CPT script and executes it.
+#Validation metrics/maps and 3-category probabilistic maps are produced.
 #Author: Á.G. Muñoz (agmunoz@iri.columbia.edu)
 #
-#Output:
-# + Several skill maps for assessment of deterministic forecast, in the output folder.
-# + CPT scripts used to assess skill, in the scripts folder.
-# + Downloaded input files, in the input folder.
+#Output (in CPT format, trivially read by the DL):
+# + Probabilistic PCR forecast file, in the 'output' folder.
+# + Several skill maps for assessment of deterministic forecast, in the 'output' folder.
+# + CPT scripts written by this code, in the 'scripts' folder.
+# + Downloaded input files, in the 'input' folder.
 #Notes:
+# + Right now only the CMC1-CanCM3 model. Generalization is trivial.
 # + Old data in the input folder is deleted at the beginning of the process!
-# + User needs to know how many EOFs to use for PCR.
-# + Rainfall observations are CPC Unified (Chen et al 2008).
+# + User needs to know the max number of EOFs to use for PCR (minimum is set to 1).
+# + Rainfall observations are CPC Unified (Chen et al 2008). Generalization is trivial.
 # + Cross-validation windows is set to be 3 yrs.
 
 ####START OF USER-MODIFIABLE SECTION##########################################################################
@@ -50,8 +53,9 @@ cptdir='/Users/agmunoz/Documents/Angel/CPT/CPT/15.7.3/'
 
 clear
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-echo Script to automate the download of NMME seasonal rainfall deterministic hindcasts and observations,
-echo and to execute CPT to assess associated raw skill
+echo Script to automate the execution of CPT to produce forecasts using NMME models and PCR for MOS.
+echo It dowloads the predictor and predictand data from the DL, creates the CPT script and executes it.
+echo Validation metrics/maps and 3-category probabilistic maps are produced.
 echo Author: Á.G. Muñoz - agmunoz@iri.columbia.edu
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 echo
@@ -89,7 +93,7 @@ curl -k ''$url'' > obs_precip_${tgt}.tsv
 #Create CPT script
 cd ../scripts
 echo ---------------------------------------------------
-echo Producing CPT scripts for $tgt initialized in $mo ...
+echo Producing CPT scripts ...
 
   
 cat  <<< '#!/bin/bash 
@@ -201,7 +205,10 @@ chmod 755 PCRForecast_precip_${tgt}_ini${mon}.cpt
 
 cd ../input
 
-echo Done with $tgt initialized in $mo !! Check output folder for results.
+echo
+echo ---------------------------------------------------------------
+echo Done with $tgt $fsyear forecast, initialized in $mo $fsyear !! 
+echo Check output folder for validation and forecast results.
 echo
 echo
 done

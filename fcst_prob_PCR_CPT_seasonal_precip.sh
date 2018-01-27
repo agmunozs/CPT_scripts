@@ -11,6 +11,7 @@
 # + Downloaded input files, in the 'input' folder.
 #Notes:
 # + Right now only the CMC1-CanCM3 model. Generalization is trivial.
+# + Multiple initialization months can be included.
 # + Old data in the input folder is deleted at the beginning of the process!
 # + User needs to know the max number of EOFs to use for PCR (minimum is set to 1).
 # + Rainfall observations are CPC Unified (Chen et al 2008). Generalization is trivial.

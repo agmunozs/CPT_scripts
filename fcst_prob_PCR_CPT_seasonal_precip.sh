@@ -25,9 +25,9 @@ declare -a tgt=('Feb-Apr')#for now, just write the period(s) corresponding a tgt
 iyear=1982
 fyear=2010
 #Start year to forecast
-fsyear=1982
+fsyear=2018
 #Number of years to forecast
-nyear=37
+nyear=1
 #Spatial domain for predictor
 nla1=29 # Nothernmost latitude
 sla1=23 # Southernmost latitude
@@ -62,11 +62,11 @@ mkdir -p scripts
 rm -Rf input/model_*.tsv input/obs_*.tsv  #comment if deletion of old input files is not desired.
 rm -Rf scripts/*
 
-cd input
+cd input      
 #Set up some parameters
 export CPT_BIN_DIR=${cptdir}
 
-#Start loop
+#Start loop 
 for mo in "${mon[@]}"
 do
 #Download hindcasts
@@ -74,7 +74,14 @@ url='http://iridl.ldeo.columbia.edu/SOURCES/.Models/.NMME/.CMC1-CanCM3/.HINDCAST
 echo $url
 echo ---------------------------------------------------
 echo Downloading hindcasts and observations for $tgt initialized in $mo ...
-curl -k ''$url'' > model_precip_${tgt}_ini${mon}.tsv
+curl -k ''$url'' > hindcast_precip_${tgt}_ini${mon}.tsv
+
+#Download forecasts
+url='http://iridl.ldeo.columbia.edu/SOURCES/.Models/.NMME/.CMC1-CanCM3/.FORECAST/.MONTHLY/.prec/S/%280000%201%20'${mo}'%20'${fsyear}'%29VALUES/L/%28'${tgti}'%29/%28'${tgtf}'%29RANGEEDGES%5BL%5D//keepgrids/average%5BM%5Daverage/Y/%2823N%29%2829N%29RANGEEDGES/X/%2882E%29%2890E%29RANGEEDGES%5BX/Y%5D%5BL/S/add%5D/cptv10.tsv'
+echo $url
+echo ---------------------------------------------------
+echo Downloading hindcasts and observations for $tgt initialized in $mo ...
+curl -k ''$url'' > forecast_precip_${tgt}_ini${mon}.tsv
 
 #Download observations
 url='http://iridl.ldeo.columbia.edu/SOURCES/.Models/.NMME/.CPC-CMAP-URD/prate/T/%28Jan%20'${iyear}'%29/%28Dec%20'${fyear}'%29/RANGE/T/3/runningAverage/T/%28'${tgt}'%29/VALUES/Y/%2824N%29/%2827N%29/RANGEEDGES/X/%2883E%29/%2888E%29/RANGEEDGES/-999/setmissing_value/%5BX/Y%5D%5BT%5Dcptv10.tsv'
@@ -91,7 +98,7 @@ cat  <<< '#!/bin/bash
 '${cptdir}'CPT.x <<- END
 614 # Opens GCM validation
 1 # Opens X input file
-../input/model_precip_'${tgt}'_ini'${mon}'.tsv
+../input/hindcast_precip_'${tgt}'_ini'${mon}'.tsv
 '${nla1}' # Nothernmost latitude
 '${sla1}' # Southernmost latitude
 '${wlo1}' # Westernmost longitude
